@@ -1,0 +1,226 @@
+definitions:
+  http.CommonError:
+    properties:
+      error:
+        type: string
+    type: object
+  http.CommonResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  http.CreateProductRequest:
+    properties:
+      manufacturer:
+        type: string
+      price:
+        type: number
+      product_count:
+        type: integer
+      product_name:
+        type: string
+    type: object
+  http.Product:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      manufacturer:
+        type: string
+      price:
+        type: number
+      product_count:
+        type: integer
+      product_name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact:
+    email: test@test.com
+    name: ProductService API Service
+    url: http://test.com
+  title: ProductService API
+paths:
+  /api/products:
+    get:
+      description: Получение списка всех продуктов
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/http.Product'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.CommonError'
+      security:
+      - BearerAuth: []
+      summary: Получение продуктов
+      tags:
+      - Products
+    post:
+      description: Добавление нового продукта
+      parameters:
+      - description: информация о новом продукте
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/http.CommonResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.CommonError'
+      security:
+      - BearerAuth: []
+      summary: Добавление нового продукта
+      tags:
+      - Products
+  /api/products/{id}:
+    delete:
+      description: Удаление продукта по ID
+      parameters:
+      - description: id продукта
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.CommonResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.CommonError'
+      security:
+      - BearerAuth: []
+      summary: Удалить продукт по ID
+      tags:
+      - Products
+    get:
+      description: Получение продукта по ID
+      parameters:
+      - description: id продукта
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.CommonError'
+      security:
+      - BearerAuth: []
+      summary: Получить продукт по ID
+      tags:
+      - Products
+    put:
+      description: Обновление продукта по ID
+      parameters:
+      - description: id продукта
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: информация о продукте
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/http.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.CommonResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/http.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.CommonError'
+      security:
+      - BearerAuth: []
+      summary: Обновить продукт по ID
+      tags:
+      - Products
+  /ping:
+    get:
+      description: Проверка сервиса
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.CommonResponse'
+      summary: Health-check
+      tags:
+      - Ping
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
